@@ -68,7 +68,18 @@ class HomePage extends StatelessWidget {
                                   ),
                                 );
                               }
-                              return const Text('hello');
+                              return ListTile(
+                                  leading: const Icon(Icons.warning, size: 25),
+                                  title: const Text(
+                                      ' ------------------------- '),
+                                  subtitle: Text(t),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.map),
+                                    onPressed: () => launchUrl(Uri.parse(
+                                        'https://maps.google.com/?q=${alert['latitude']},${alert['longitude']}')),
+                                  ),
+                                );
+                              
                             });
                       }),
                 ],
