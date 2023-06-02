@@ -3,8 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseServices {
   Stream<List> getAlert() async* {
     await for (QuerySnapshot query
-        in FirebaseFirestore.instance.collectionGroup('location').orderBy(FieldPath.documentId).snapshots()) {
-      yield query.docs.reversed.map((e) => e.data() as Map).toList();
+        in FirebaseFirestore.instance.collectionGroup('location').snapshots()) {
+      List list =  query.docs.map((e) => e.data() as Map).toList();
+      list.sort((a,b){
+        return b['timestamp'].toString().compareTo(a['timestamp'].toString());
+      });
+      yield list;
+
     }
   }
 
