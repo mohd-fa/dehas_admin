@@ -13,26 +13,26 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: StreamBuilder(
-          stream: db.getAlert(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loading();
-            }
-            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding:
-                        EdgeInsets.only(left: 20.0, right: 20, top: 20),
-                    child: Text(
-                      'Alerts',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
+    return StreamBuilder(
+        stream: db.getAlert(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loading();
+          }
+          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding:
+                      EdgeInsets.only(left: 20.0, right: 20, top: 20),
+                  child: Text(
+                    'Alerts',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  ListView.builder(
+                ),
+                Expanded(
+                  child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                         Map alert = snapshot.data![index];
                         String t = DateFormat('dd MMM yyyy  HH:mm:ss')
                             .format((alert['timestamp'] as Timestamp).toDate());
-    
+                    
                         return FutureBuilder<Map>(
                             future: db.getUser(alert['uid']),
                             builder: (context, snapshot) {
@@ -51,10 +51,10 @@ class HomePage extends StatelessWidget {
                                       LinearProgressIndicator(
                                         color: Colors.blue[300],
                                       ),
-      
+                    
                                 );
                               }
-    
+                    
                               if (snapshot.hasData) {
                                 return ListTile(
                                   leading: const Icon(Icons.warning, size: 25),
@@ -82,11 +82,11 @@ class HomePage extends StatelessWidget {
                               
                             });
                       }),
-                ],
-              );
-            }
-            return const Center(child: Text('No alerts available'));
-          }),
-    );
+                ),
+              ],
+            );
+          }
+          return const Center(child: Text('No alerts available'));
+        });
   }
 }
